@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Details</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    #viewModalOverlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    #viewModalContent {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    #closeModalBtn {
+      display: block;
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #ccc;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Employee Details</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Designation</th>
+        <th>Gender</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="employeeTableBody">
+      <!-- Employee data will be populated here dynamically -->
+    </tbody>
+  </table>
+  <div id="viewModalOverlay">
+    <!-- The view modal content container -->
+    <div id="viewModalContent">
+      <h2>Employee Details</h2>
+      <div id="viewModalBody">
+        <!-- Employee details will be populated here dynamically -->
+      </div>
+      <button id="closeViewModalBtn">Close</button>
+    </div>
+  </div>
+  <div id="">
+    <script>
+      // Get the modal elements
+      const modalOverlay = document.getElementById("modalOverlay");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+      const openModalBtn = document.getElementById("openModalBtn");
+      // Function to open the modal
+      function openModal() {
+        modalOverlay.style.display = "block";
+      }
+      // Function to close the modal
+      function closeModal() {
+        modalOverlay.style.display = "none";
+      }
+      // Event listeners to open and close the modal
+      openModalBtn.addEventListener("click", openModal);
+      closeModalBtn.addEventListener("click", closeModal);
+    </script>
+    <script>
+      //
+      //
+      // Function to open the view modal
+      function viewEmployee(id) {
+        console.log(id)
+        const modalOverlay = document.getElementById("viewModalOverlay");
+        const closeModalBtn = document.getElementById("closeViewModalBtn");
+        const modalBody = document.getElementById("viewModalBody");
+        const employees = JSON.parse(localStorage.getItem("employeeData"));
+        const index = employees.findIndex(item => item.id == id);
+        const employee = employees[index];
+        console.log(index)
+        modalBody.innerHTML = `
+    <p><strong>ID:</strong> ${employee.id}</p>
+    <p><strong>Name:</strong> ${employee.name}</p>
+    <p><strong>Age:</strong> ${employee.age}</p>
+    <p><strong>Designation:</strong> ${employee.designation}</p>
+    <p><strong>Gender:</strong> ${employee.gender}</p>
+    <img height="200px" width="200px" src="${href="https://www.akc.org/wp-content/uploads/2017/11/Dogo-puppy.jpg"}" alt="Employee Image">
+  `;
+        modalOverlay.style.display = "block";
+        // Event listener to close the view modal
+        closeModalBtn.addEventListener("click", function () {
+          modalOverlay.style.display = "none";
+        });
+      }
+//
+//-----------to show the data in the tabular form-------------------------------
+//
+    </script>
+    <script>
+      function showData() {
+        const employeeTableBody = document.getElementById("employeeTableBody");
+        const employeeData = JSON.parse(localStorage.getItem("employeeData"));
+        if (employeeData) {
+          employeeData.forEach((employee) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td>${employee.id}</td>
+            <td>${employee.name}</td>
+            <td>${employee.age}</td>
+            <td>${employee.designation}</td>
+            <td>${employee.gender}</td>
+            <td>
+              <button onclick="editEmployee(${employee.id})">Edit</button>
+              <button onclick="deleteEmployee(${employee.id})">Delete</button>
+              <button onclick="viewEmployee(${employee.id})">View</button>
+            </td>
+          `;
+            employeeTableBody.appendChild(row);
+          });
+        }
+      }
+      //
+      //----------------------------EDIT-------------------------------------
+      //
+      function editEmployee(id) {
+        // Implement the edit functionality here, e.g., show a form with the employee's data to edit
+        
+        alert(`Edit employee with ID: ${id}`);
+      }
+      //
+      //----------------DELETE--------------------------------------------------
+      //
+      function deleteEmployee(id) {
+        // Implement the delete functionality here, e.g., remove the employee's data from the table and localStorage
+        // Retrieve the object from localStorage
+        const jsonData = localStorage.getItem("employeeData");
+        console.log(jsonData)
+        // Parse the JSON data back into a JavaScript object
+        const employeeData = JSON.parse(jsonData);
+        // Find the index of the element you want to delete (e.g., index 1)
+        const deleteEmployee = 1;
+
+        const index = employeeData.findIndex((element) => {
+          element.id == id
+        });
+        if (index == -1) {
+          employeeData.splice(index, 1);
+        }
+        localStorage.setItem("employeeData", JSON.stringify(employeeData));
+        location.reload()
+      }
+      showData();
+    </script>
+</body>
+
+</html>
